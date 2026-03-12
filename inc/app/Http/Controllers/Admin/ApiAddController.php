@@ -50,4 +50,12 @@ class ApiAddController extends Controller
         session()->flash('message', 'Successfully updated Category.....');
         return redirect()->route('admin.api-add');
     }
+
+    public function apiDelete($id){
+
+        ApiAdd::where('id',$id)->delete();
+        session()->flash('type', 'success');
+        session()->flash('message', 'Successfully deleted Category.....');
+        return redirect()->back();
+    }
 }
