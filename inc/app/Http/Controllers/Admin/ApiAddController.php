@@ -52,7 +52,6 @@ class ApiAddController extends Controller
     }
 
     public function apiDelete($id){
-
         ApiAdd::where('id',$id)->delete();
         session()->flash('type', 'success');
         session()->flash('message', 'Successfully deleted Category.....');
