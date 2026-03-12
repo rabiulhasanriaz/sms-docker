@@ -92,6 +92,8 @@
                                                         <a href="{{ route('admin.api-status-suspend', $api->id) }}" onclick="return confirm('Are you sure?')" style="color: red;">Suspend</a>
                                                         |
                                                         <a href="{{ route('admin.api-edit', $api->id) }}" onclick="return confirm('Are you sure?')" style="color: blue;">Edit</a>
+                                                        |
+                                                        <a href="{{ route('admin.api-delete', $api->id) }}" onclick="return confirm('Are you sure?')" style="color: red;">Delete</a>
                                                     </td>
                                                 </tr>
                                             @endforeach
