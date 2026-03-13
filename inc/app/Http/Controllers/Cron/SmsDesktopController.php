@@ -66,10 +66,12 @@ class SmsDesktopController extends Controller
 
                 $api_balance = 0;
                 $xml_response = \SmsHelper::send_desktop_sms($numbers,$nonMaskingSmsCampaign->sdp_message);
-                if($xml_response == "0170"){
-                    $retText = "Authentication Failed! Please Contact with Admin/Service Provider!";
+//                dd($xml_response);
+                if (!is_object($xml_response) || (isset($xml_response->status) && $xml_response->status == 401) || $xml_response == "404") {
+                    $retText = "Authentication Failed/Api Not Found! Please Contact with Admin/Service Provider!";
                     return view('cron.sms-desktop', compact('retText'));
                 }
+
                 // dd($xml_response);
 //                $api_balance = \SmsHelper::api_balance();
 //                $balance_update = ApiAdd::
@@ -89,6 +91,7 @@ class SmsDesktopController extends Controller
                 $xmlResponseArray = $messageId
                     ? array_fill(0, count($numbersArray), $messageId)
                     : array_fill(0, count($numbersArray), null); // or skip insert if no ID
+
 
 // Determine status from either key
                 $status = $xml_response->Status ?? $xml_response->status ?? null;
@@ -121,7 +124,7 @@ class SmsDesktopController extends Controller
                             'sdt_campaign_type' => $checkedSms->sdp_campaign_type,
                             'sdt_deal_type' => $checkedSms->sdp_deal_type,
                             'sdt_sms_type' => $checkedSms->sdp_sms_type,
-                            'sdt_sms_id' => $xmlResponseArray[$index] ?? null,
+                            'sdt_sms_id' => $xmlResponseArray[$index] ?? $checkedSms->id,
                             'sdt_sms_text_type' => $checkedSms->sdp_sms_text_type,
                             'sdt_target_time' => $checkedSms->sdp_target_time,
                             'created_at' => $checkedSms->created_at,
@@ -152,8 +155,6 @@ class SmsDesktopController extends Controller
             return view('cron.sms-desktop', compact('retText'));
 
         } else {
-
-            $api_balance = \SmsHelper::api_balance();
             $retText = "no sms found";
 //            $api_balance = "Api Balance is:" . $api_balance->credit;
             return view('cron.sms-desktop', compact('retText'));

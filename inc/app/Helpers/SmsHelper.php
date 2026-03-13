@@ -50,6 +50,9 @@ class SmsHelper
             $targetApi[] = $api->api_url;
             shuffle($targetApi);
         }
+        if (empty($targetApi)) {
+            return "404";
+        }
 
         return $targetApi[0];
     }
@@ -494,13 +497,18 @@ class SmsHelper
 
     public static function send_desktop_sms($number,$sms_text)
     {
-        $api_balance = self::api_balance();
-        if($api_balance->status == 401){
-            return "0170";
-        }
+//        $api_balance = self::api_balance();
+//        dd($api_balance);
+//        if($api_balance->status == 401){
+//            return "0170";
+//        }
         $balance = 0;
-        $balance = ApiAdd::where('api_status',1)->update(['api_balance' => $api_balance->credit]);
+//        $balance = ApiAdd::where('api_status',1)->update(['api_balance' => $api_balance->credit]);
         $api = self::get_api();
+        if($api == '404'){
+            return "404";
+        }
+//        dd($api);
 
         if (!is_array($number)) {
             $number = explode(',', $number);
@@ -607,10 +615,14 @@ class SmsHelper
     }
 
     public static function api_balance(){
+        $api = self::get_api();
+        if($api == '404'){
+            return "404";
+        }
         $curl = curl_init();
-
+        $api = ApiAdd::where('api_status',1)->first();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://api.icombd.com/balance?username=asureturisum&password=FC!SMS123',
+            CURLOPT_URL => $api->api_url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -621,6 +633,7 @@ class SmsHelper
         ));
 
         $response = curl_exec($curl);
+//        dd($response);
         $api_balance = json_decode($response);
         curl_close($curl);
         return $api_balance;

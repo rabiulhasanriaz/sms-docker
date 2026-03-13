@@ -16,7 +16,7 @@
             {{ $text }}
         @endforeach
     @else
-        @if(@$retText == "Authentication Failed! Please Contact with Admin/Service Provider!")
+        @if(@$retText == "Authentication Failed/Api Not Found! Please Contact with Admin/Service Provider!")
             <h1 style="color:red;">{{ @$retText }}</h1>
         @else
             {{ @$retText }}

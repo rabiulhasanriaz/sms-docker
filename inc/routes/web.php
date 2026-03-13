@@ -82,7 +82,7 @@ Route::namespace('Admin')->name('admin.')->middleware(['auth', 'RoleRoot'])->pre
     Route::get('api-edit/{id}','ApiAddController@apiEdit')->name('api-edit');
     Route::post('api-update/{id}','ApiAddController@apiUpdate')->name('api-update');
     Route::get('api-delete/{id}','ApiAddController@apiDelete')->name('api-delete');
-    
+
 
     Route::get('dynamic-permission','DynamicPermissionController@dynamic_user')->name('dynamic-permission');
     Route::get('dynamic-permission-active/{id}','DynamicPermissionController@dynamic_user_active')->name('dynamic-permission-active');
